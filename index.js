@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 
 // app.use('/api/categories', auth);
 app.use('/api/users', auth);
+app.use('/api/orders', auth);
 
 Object.keys(routes).map((route) => app.use('/api', routes[route]));
 
