@@ -9,9 +9,7 @@ dotenv.config({ path: '.env' });
 
 const routes = require('./app/routes');
 const knex = require('./database/knex');
-// const {
-//   auth,
-// } = require('./app/http/middlewares');
+const { auth } = require('./app/http/middlewares');
 
 Model.knex(knex);
 
@@ -23,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // app.use('/api/categories', auth);
+app.use('/api/users', auth);
 
 Object.keys(routes).map((route) => app.use('/api', routes[route]));
 
