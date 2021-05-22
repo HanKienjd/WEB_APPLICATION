@@ -1,12 +1,14 @@
 const Joi = require('joi');
-const { abort } = require('../../../helpers/error');
+
 const auth = require('../../services/auth');
+const { abort } = require('../../../helpers/error');
 
 const validate = async (params) => {
   try {
     const schema = Joi.object({
       email: Joi.string().email(),
       password: Joi.string().min(6),
+      passwordConfirmation: Joi.equal(Joi.ref('password')),
     });
 
     return await schema.validate(params);
@@ -15,14 +17,15 @@ const validate = async (params) => {
   }
 };
 
-const signIn = async (req, res) => {
+const signUp = async (req, res) => {
   const params = {
     email: req.body.email,
     password: req.body.password,
+    passwordConfirmation: req.body.passwordConfirmation,
   };
   await validate(params);
-  const result = await auth.signIn(params);
+  const result = await auth.signUp(params);
   return res.status(200).send(result);
 };
 
-module.exports = signIn;
+module.exports = signUp;
