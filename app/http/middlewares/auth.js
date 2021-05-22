@@ -1,6 +1,5 @@
 const { User } = require('../../models');
 const jwt = require('../../helpers/jwt');
-const userStatus = require('../../enums/userStatus');
 
 async function getUser(req) {
   const authorization = req.headers.authorization || '';
@@ -16,7 +15,7 @@ async function getUser(req) {
 
 async function auth(req, res, next) {
   const user = await getUser(req);
-  if (!user || user.status === userStatus.INACTIVE) {
+  if (!user) {
     return res.status(401).send({
       message: 'You must be logged in',
     });
