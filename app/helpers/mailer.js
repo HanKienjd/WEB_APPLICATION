@@ -15,7 +15,7 @@ const createTransporter = async () => {
     refresh_token: process.env.REFRESH_TOKEN,
   });
 
-  const accessToken = await oauth2Client.getAccessToken();
+  // const accessToken = await oauth2Client.getAccessToken();
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
