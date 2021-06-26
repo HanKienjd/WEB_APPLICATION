@@ -22,6 +22,7 @@ const signIn = async (req, res) => {
   };
   await validate(params);
   const result = await auth.signIn(params);
+
   return res.status(200).send(result);
 };
 

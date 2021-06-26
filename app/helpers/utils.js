@@ -12,3 +12,14 @@ exports.timeEnd = (name) => {
 exports.log = (value) => {
   console.log(`${this.getCurrentAt()}:`, value);
 };
+
+exports.randomCode = () => {
+  const randomstring = require('randomstring');
+
+  const id = randomstring.generate({
+    length: 8,
+    charset: 'numeric',
+  });
+
+  return id;
+};
