@@ -3,25 +3,26 @@ const Joi = require('joi');
 const productService = require('../../services/product');
 const { abort } = require('../../../helpers/error');
 
-async function validation({ limit, page }) {
+async function validation({ limit, page, categoryIds }) {
   try {
     const schema = Joi.object().keys({
       limit: Joi.number().min(1),
       page: Joi.number().min(1),
+      categoryIds: Joi.array().items(Joi.number()).allow(null),
     });
 
-    return await schema.validateAsync({ limit, page });
+    return await schema.validateAsync({ limit, page, categoryIds });
   } catch (error) {
     return abort(400, 'Params error');
   }
 }
 
 async function getList(req, res) {
-  const { limit, page } = req.query;
+  const { limit, page, categoryIds } = req.query;
 
-  await validation({ limit, page });
+  await validation({ limit, page, categoryIds });
 
-  const products = await productService.getList({ limit, page });
+  const products = await productService.getList({ limit, page, categoryIds });
 
   return res.status(200).send(products);
 }

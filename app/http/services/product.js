@@ -1,6 +1,6 @@
 const { Product, Category } = require('../../models');
 
-const { abort } = require('../../helpers/error.js');
+const { abort } = require('../../helpers/error');
 
 exports.create = async ({
   name,
@@ -36,10 +36,12 @@ exports.create = async ({
   return '';
 };
 
-exports.getList = async ({ limit, page }) => {
+exports.getList = async ({ limit, page, categoryIds }) => {
   const offset = page * limit - limit;
 
-  const products = await Product.query().offset(offset).limit(limit);
+  const products = await Product.query()
+    .whereIn('category_id', categoryIds)
+    .offset(offset).limit(limit);
 
   const [{ 'count(*)': total }] = await Product.query().count();
 
