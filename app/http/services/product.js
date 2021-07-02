@@ -39,11 +39,18 @@ exports.create = async ({
 exports.getList = async ({ limit, page, categoryIds }) => {
   const offset = page * limit - limit;
 
-  const products = await Product.query()
-    .whereIn('category_id', categoryIds)
+  let products = Product.query()
     .offset(offset).limit(limit);
 
-  const [{ 'count(*)': total }] = await Product.query().count();
+  let total = Product.query().count();
+
+  if (categoryIds && categoryIds.length) {
+    products.whereIn('category_id', categoryIds);
+    total.whereIn('category_id', categoryIds);
+  }
+
+  products = await products();
+  [{ 'count(*)': total }] = await total();
 
   return { products, total };
 };
