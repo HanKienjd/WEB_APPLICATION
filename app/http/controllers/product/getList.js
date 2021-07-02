@@ -18,8 +18,10 @@ async function validation({ limit, page, categoryIds }) {
 }
 
 async function getList(req, res) {
-  const { limit, page, categoryIds } = req.query;
+  const { limit, page } = req.query;
+  let { categoryIds } = req.query;
 
+  categoryIds = JSON.parse(categoryIds);
   await validation({ limit, page, categoryIds });
 
   const products = await productService.getList({ limit, page, categoryIds });

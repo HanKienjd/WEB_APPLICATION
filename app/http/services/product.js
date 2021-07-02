@@ -49,8 +49,8 @@ exports.getList = async ({ limit, page, categoryIds }) => {
     total.whereIn('category_id', categoryIds);
   }
 
-  products = await products();
-  [{ 'count(*)': total }] = await total();
+  products = await products;
+  [{ 'count(*)': total }] = await total;
 
   return { products, total };
 };
