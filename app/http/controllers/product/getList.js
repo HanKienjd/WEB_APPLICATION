@@ -21,7 +21,8 @@ async function getList(req, res) {
   const { limit, page } = req.query;
   let { categoryIds } = req.query;
 
-  categoryIds = JSON.parse(categoryIds);
+  categoryIds = categoryIds ? JSON.parse(categoryIds) : undefined;
+
   await validation({ limit, page, categoryIds });
 
   const products = await productService.getList({ limit, page, categoryIds });
