@@ -8,7 +8,7 @@ async function validation({ limit, page, categoryIds }) {
     const schema = Joi.object().keys({
       limit: Joi.number().min(1),
       page: Joi.number().min(1),
-      categoryIds: Joi.array().items(Joi.number()).allow(null),
+      categoryIds: Joi.array().items(Joi.number()),
     });
 
     return await schema.validateAsync({ limit, page, categoryIds });
