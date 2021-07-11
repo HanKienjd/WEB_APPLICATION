@@ -1,6 +1,6 @@
 const { Category } = require('../../models');
 
-const { abort } = require('../../helpers/error.js');
+const { abort } = require('../../helpers/error');
 
 exports.create = async ({ name }) => {
   const category = await Category.query().findOne({
@@ -27,7 +27,7 @@ exports.update = async ({ categoryId, name }) => {
 };
 
 exports.getList = () => {
-  const categories = Category.query().select('id', 'name');
+  const categories = Category.query().select('id', 'name', 'quantity');
 
   return categories;
 };
