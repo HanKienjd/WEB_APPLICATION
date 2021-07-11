@@ -1,7 +1,7 @@
 exports.seed = async (knex) => {
   await knex('users').insert([{
-    email: 'hoan.nguyenduy@amela.vn',
-    full_name: 'Nguyen Duy Hoan',
+    email: 'kienp544@gmail.com',
+    full_name: 'Han',
     location_id: 1,
     role_id: 1,
     code: 'MI3000',

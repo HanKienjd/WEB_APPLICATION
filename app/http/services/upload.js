@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const { abort } = require('../../helpers/error.js');
+const { abort } = require('../../helpers/error');
 
 exports.getImage = ({ imgName }) => {
   const pathFile = `${process.cwd()}/uploads/${imgName}`;
