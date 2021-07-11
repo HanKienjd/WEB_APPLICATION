@@ -1,19 +1,6 @@
 version: '3'
 
 services:
-
-  webserver:
-    image: node:12.18.2
-    tty: true
-    ports:
-      - "80:3000"
-    volumes:
-      - .:/opt/app
-    environment:
-      - NODE_ENV=dev
-    networks:
-      - app-network
-  
   mysql:
     image: mysql:8.0
     ports:
@@ -29,6 +16,18 @@ services:
     networks:
       - app-network
 
+  node_server: 
+    container_name: node_server
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+        - "3000:3000"
+    depends_on: 
+      - mysql
+    networks:
+      - app-network
+  
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -44,19 +43,19 @@ services:
     networks:
       - app-network
 
-  minio:
-    image: minio/minio
-    volumes:
-    - .data/minio/:/data
-    ports:
-    - "9000:9000"
-    environment:
-    - MINIO_ACCESS_KEY=app
-    - MINIO_SECRET_KEY=secretsecret
-    - MINIO_REGION=us-west-2
-    command: server /data
-    networks:
-    - app-network
+  # minio:
+  #   image: minio/minio
+  #   volumes:
+  #   - .data/minio/:/data
+  #   ports:
+  #   - "9000:9000"
+  #   environment:
+  #   - MINIO_ACCESS_KEY=app
+  #   - MINIO_SECRET_KEY=secretsecret
+  #   - MINIO_REGION=us-west-2
+  #   command: server /data
+  #   networks:
+  #   - app-network
 
 networks:
   app-network:
