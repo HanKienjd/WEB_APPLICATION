@@ -27,7 +27,7 @@ exports.update = async ({ categoryId, name }) => {
 };
 
 exports.getList = () => {
-  const categories = Category.query().select('id', 'name', 'quantity');
+  const categories = Category.query().select('id', 'name', 'quantity', 'image');
 
   return categories;
 };
