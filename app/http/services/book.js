@@ -26,18 +26,29 @@ exports.update = async ({ bookId, name }) => {
   return '';
 };
 
-exports.getList = () => {
+exports.getList = ({ categoryId }) => {
   const books = Book.query().select('id', 'name', 'quantity', 'author', 'category_id', 'image', 'year_release');
-
+  // get list book by category
+  if (categoryId && categoryId.length > 0) {
+    books.where('category_id', categoryId);
+  }
   return books;
 };
 
-exports.remove = async ({ id }) => {
-  const book = await Book.query().findById(id);
+exports.remove = async ({ bookId }) => {
+  const book = await Book.query().findById(bookId);
 
   if (!book) return abort(400, 'This book is not already exists');
 
-  await Book.query().findById(id).delete();
+  await Book.query().findById(bookId).delete();
 
-  return '';
+  return { message: 'Delete book successfully' };
+};
+
+exports.getBookById = async ({ bookId }) => {
+  const book = await Book.query().findById(bookId);
+
+  if (!book) return abort(400, 'This book is not already exists');
+
+  return book;
 };
