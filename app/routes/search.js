@@ -6,6 +6,6 @@ const { search: searchController } = require('../http/controllers');
 
 const router = express.Router();
 
-router.get('/search', auth, checkPermission, searchController.queryName);
+router.get('/search', searchController.queryName);
 
 module.exports = router;
