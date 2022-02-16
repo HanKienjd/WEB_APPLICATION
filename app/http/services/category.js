@@ -2,14 +2,14 @@ const { Category } = require('../../models');
 
 const { abort } = require('../../helpers/error');
 
-exports.create = async ({ name }) => {
+exports.create = async ({ name, imgCategory }) => {
   const category = await Category.query().findOne({
     name,
   });
 
   if (category) return abort(400, 'This category is already exits');
 
-  await Category.query().insert({ name });
+  await Category.query().insert({ name, image: `${process.env.APP_URL_UPLOAD}/${imgCategory}` });
 
   return '';
 };
