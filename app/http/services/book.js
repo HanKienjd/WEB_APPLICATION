@@ -2,14 +2,18 @@ const { Book } = require('../../models');
 
 const { abort } = require('../../helpers/error');
 
-exports.create = async ({ name }) => {
+exports.create = async ({
+  name, categoryId, quantity, yearRelease, author, bookImg,
+}) => {
   const book = await Book.query().findOne({
     name,
   });
 
   if (book) return abort(400, 'This book is already exits');
 
-  await Book.query().insert({ name });
+  await Book.query().insert({
+    name, categoryId, quantity, yearRelease, author, image: `${process.env.APP_URL_UPLOAD}/${bookImg}`,
+  });
 
   return '';
 };
@@ -27,7 +31,7 @@ exports.update = async ({ bookId, name }) => {
 };
 
 exports.getList = ({ categoryId }) => {
-  const books = Book.query().select('id', 'name', 'quantity', 'author', 'category_id', 'image', 'year_release');
+  const books = Book.query().select('id', 'name', 'quantity', 'author', 'categoryId', 'image', 'yearRelease');
   // get list book by category
   if (categoryId && categoryId.length > 0) {
     books.where('category_id', categoryId);

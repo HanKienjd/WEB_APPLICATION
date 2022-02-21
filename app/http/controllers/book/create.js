@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const categoryService = require('../../services/category');
+const bookServices = require('../../services/book');
 const { abort } = require('../../../helpers/error');
 
 async function validation({ name }) {
@@ -14,19 +14,24 @@ async function validation({ name }) {
     return abort(400, 'Params error');
   }
 }
-
 async function create(req, res) {
-  const { name } = req.body;
-  const imgCategory = req.file.filename;
-  const categoryInformation = {
-    name,
-    imgCategory,
-  };
-  await validation({ name });
+  const {
+    name, author, yearRelease, quantity, categoryId,
+  } = req.body;
 
-  await categoryService.create(categoryInformation);
+  const bookImg = req.file.filename;
+  const bookInformation = {
+    name,
+    author,
+    yearRelease,
+    quantity,
+    categoryId,
+    bookImg,
+  };
+  await validation(name);
+
+  await bookServices.create(bookInformation);
 
   return res.status(201).send();
 }
-
 module.exports = create;

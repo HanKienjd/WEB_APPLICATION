@@ -4,12 +4,14 @@ const express = require('express');
 const dotenv = require('dotenv');
 const { Model } = require('objection');
 const cors = require('cors');
+const multer = require('multer');
+
+const upload = multer({ dest: 'uploads/' });
 
 dotenv.config({ path: '.env' });
 
 const routes = require('./app/routes');
 const knex = require('./database/knex');
-const { auth } = require('./app/http/middlewares');
 
 Model.knex(knex);
 
@@ -19,10 +21,7 @@ const port = 3000;
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-// app.use('/api/categories', auth);
-app.use('/api/users', auth);
-app.use('/api/orders', auth);
+// app.use(upload.array()); // for parsing multipart/form-data
 
 Object.keys(routes).map((route) => app.use('/api', routes[route]));
 
