@@ -4,15 +4,14 @@ const dayjs = require('dayjs');
 const { Order } = require('../../models');
 const { abort } = require('../../helpers/error.js');
 
-exports.create = async ({ orderDetail, id }) => {
+exports.create = async ({ orderDetail, userId }) => {
   const order = {
-    buy_date: dayjs().format('YYYY-MM-DD'),
+    start_date: dayjs().format('YYYY-MM-DD'),
     status: 0,
-    user_id: id,
+    user_id: userId,
     orderDetail: orderDetail.map((element) => ({
-      product_id: element.productId,
+      book_id: element.book_id,
       quantity: element.quantity,
-      price: element.price,
     })),
   };
 
@@ -21,6 +20,7 @@ exports.create = async ({ orderDetail, id }) => {
       await OrderTrx.query().upsertGraph(order);
     });
   } catch (e) {
+    console.log('🚀 ~ file: order.js ~ line 24 ~ exports.create= ~ e', e);
     return abort(500, 'Something went wrong');
   }
 

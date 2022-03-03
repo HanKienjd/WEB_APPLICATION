@@ -6,9 +6,10 @@ const { abort } = require('../../../helpers/error');
 async function validation(orderDetail) {
   try {
     const orderDetailSchema = Joi.object().keys({
-      productId: Joi.number().min(1),
+      book_id: Joi.number().min(1),
       quantity: Joi.number().min(0),
-      price: Joi.number().min(1),
+      start_date: '',
+      end_date: '',
     });
 
     const schema = Joi.array().items(orderDetailSchema);
@@ -20,12 +21,12 @@ async function validation(orderDetail) {
 }
 
 async function create(req, res) {
-  const orderDetail = req.body;
-  const { id } = req.user;
+  const { orderDetail } = req.body;
+  const { userId } = req.body;
 
   await validation(orderDetail);
 
-  await orderService.create({ orderDetail, id });
+  await orderService.create({ orderDetail, userId });
 
   return res.status(201).send();
 }

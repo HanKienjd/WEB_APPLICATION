@@ -3,7 +3,7 @@ const { Book } = require('../../models');
 const { abort } = require('../../helpers/error');
 
 exports.create = async ({
-  name, categoryId, quantity, yearRelease, author, bookImg, publisher, note
+  name, categoryId, quantity, yearRelease, author, bookImg, publisher, note,
 }) => {
   const book = await Book.query().findOne({
     name,
@@ -12,7 +12,7 @@ exports.create = async ({
   if (book) return abort(400, 'This book is already exits');
 
   await Book.query().insert({
-    name, categoryId, quantity, yearRelease, author, image: `${process.env.APP_URL_UPLOAD}/${bookImg}`, publisher, note
+    name, categoryId, quantity, yearRelease, author, image: `${process.env.APP_URL_UPLOAD}/${bookImg}`, publisher, note,
   });
 
   return '';
