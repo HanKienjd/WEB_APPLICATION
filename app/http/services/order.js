@@ -20,7 +20,6 @@ exports.create = async ({ orderDetail, userId }) => {
       await OrderTrx.query().upsertGraph(order);
     });
   } catch (e) {
-    console.log('🚀 ~ file: order.js ~ line 24 ~ exports.create= ~ e', e);
     return abort(500, 'Something went wrong');
   }
 
@@ -29,29 +28,35 @@ exports.create = async ({ orderDetail, userId }) => {
 
 exports.getList = async ({ limit, page, userId }) => {
   const offset = limit * page - limit;
-
-  const orders = await Order.query()
-    .where('user_id', userId)
-    .select('id', 'buy_date')
-    .limit(limit)
-    .offset(offset);
+  let orders;
+  if (userId) {
+    orders = await Order.query()
+      .where('user_id', userId)
+      .select('*')
+      .limit(limit)
+      .offset(offset);
+  } else {
+    orders = await Order.query()
+      .select('*')
+      .limit(limit)
+      .offset(offset);
+  }
 
   const [{ 'count(*)': total }] = await Order.query().count();
 
   return { orders, total };
 };
 
-exports.getDetail = async ({ orderId, userId }) => {
+exports.getDetail = async ({ orderId }) => {
   const orderDetail = await Order.query()
     .findOne({
       id: orderId,
-      user_id: userId,
     })
-    .select('id', 'buy_date')
+    .select('id', 'start_date', 'status', 'user_id', 'code', 'end_date', 'approval')
     .withGraphFetched('orderDetail', (builder) => {
-      builder.select('id', 'product_id', 'quantity', 'price');
+      builder.select('id', 'book_id', 'quantity');
     })
-    .withGraphFetched('orderDetail.product', (builder) => {
+    .withGraphFetched('orderDetail.book', (builder) => {
       builder.select('id', 'name', 'image');
     });
 

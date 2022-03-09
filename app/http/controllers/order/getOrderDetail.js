@@ -17,11 +17,10 @@ async function validation({ orderId }) {
 
 async function getDetail(req, res) {
   const { orderId } = req.params;
-  const { id: userId } = req.user;
 
   await validation({ orderId });
 
-  const product = await orderService.getDetail({ orderId, userId });
+  const product = await orderService.getDetail({ orderId });
 
   return res.status(200).send(product);
 }
