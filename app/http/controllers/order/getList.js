@@ -17,8 +17,7 @@ async function validation({ limit, page }) {
 }
 
 async function getList(req, res) {
-  const { limit, page } = req.query;
-  const { id: userId } = req.user;
+  const { limit, page, userId } = req.query;
 
   await validation({ limit, page });
 

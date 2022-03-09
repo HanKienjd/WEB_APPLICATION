@@ -4,15 +4,14 @@ const dayjs = require('dayjs');
 const { Order } = require('../../models');
 const { abort } = require('../../helpers/error.js');
 
-exports.create = async ({ orderDetail, id }) => {
+exports.create = async ({ orderDetail, userId }) => {
   const order = {
-    buy_date: dayjs().format('YYYY-MM-DD'),
+    start_date: dayjs().format('YYYY-MM-DD'),
     status: 0,
-    user_id: id,
+    user_id: userId,
     orderDetail: orderDetail.map((element) => ({
-      product_id: element.productId,
+      book_id: element.book_id,
       quantity: element.quantity,
-      price: element.price,
     })),
   };
 
@@ -29,29 +28,35 @@ exports.create = async ({ orderDetail, id }) => {
 
 exports.getList = async ({ limit, page, userId }) => {
   const offset = limit * page - limit;
-
-  const orders = await Order.query()
-    .where('user_id', userId)
-    .select('id', 'buy_date')
-    .limit(limit)
-    .offset(offset);
+  let orders;
+  if (userId) {
+    orders = await Order.query()
+      .where('user_id', userId)
+      .select('*')
+      .limit(limit)
+      .offset(offset);
+  } else {
+    orders = await Order.query()
+      .select('*')
+      .limit(limit)
+      .offset(offset);
+  }
 
   const [{ 'count(*)': total }] = await Order.query().count();
 
   return { orders, total };
 };
 
-exports.getDetail = async ({ orderId, userId }) => {
+exports.getDetail = async ({ orderId }) => {
   const orderDetail = await Order.query()
     .findOne({
       id: orderId,
-      user_id: userId,
     })
-    .select('id', 'buy_date')
+    .select('id', 'start_date', 'status', 'user_id', 'code', 'end_date', 'approval')
     .withGraphFetched('orderDetail', (builder) => {
-      builder.select('id', 'product_id', 'quantity', 'price');
+      builder.select('id', 'book_id', 'quantity');
     })
-    .withGraphFetched('orderDetail.product', (builder) => {
+    .withGraphFetched('orderDetail.book', (builder) => {
       builder.select('id', 'name', 'image');
     });
 

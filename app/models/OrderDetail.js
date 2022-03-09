@@ -6,15 +6,15 @@ class OrderDetail extends Model {
   }
 
   static get relationMappings() {
-    const Product = require('./Product');
+    const Book = require('./Book');
 
     return {
-      product: {
+      book: {
         relation: Model.BelongsToOneRelation,
-        modelClass: Product,
+        modelClass: Book,
         join: {
-          from: 'order_detail.product_id',
-          to: 'products.id',
+          from: 'order_detail.book_id',
+          to: 'books.id',
         },
       },
     };
