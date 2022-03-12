@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/categories', auth, checkPermission, upload.single('imgCategory'), categoryController.create);
 router.get('/categories', categoryController.getList);
-router.put('/categories/:categoryId', auth, checkPermission, categoryController.update);
+router.put('/categories/:categoryId', auth, checkPermission, upload.single('imgCategory'), categoryController.update);
 router.delete('/categories/:categoryId', auth, checkPermission, categoryController.remove);
 
 module.exports = router;

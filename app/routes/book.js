@@ -10,6 +10,7 @@ const router = express.Router();
 router.get('/books', bookController.getList);
 router.get('/books/:bookId', auth, checkPermission, bookController.getBookById);
 router.post('/books', auth, checkPermission, upload.single('imageBook'), bookController.create);
+router.put('/books/:bookId', auth, checkPermission, upload.single('imageBook'), bookController.update);
 router.delete('/books/:bookId', auth, checkPermission, bookController.remove);
 
 module.exports = router;

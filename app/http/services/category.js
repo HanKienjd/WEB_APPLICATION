@@ -9,25 +9,25 @@ exports.create = async ({ name, imgCategory }) => {
 
   if (category) return abort(400, 'This category is already exits');
 
-  await Category.query().insert({ name, image: `${process.env.APP_URL_UPLOAD}/${imgCategory}` });
+  await Category.query().insert({ name, image: imgCategory });
 
   return '';
 };
 
-exports.update = async ({ categoryId, name }) => {
+exports.update = async ({ categoryId, name, imgCategory }) => {
   const category = await Category.query().findOne({
     name,
   });
 
   if (category && category.id === categoryId) return abort(400, 'This category is already exits');
 
-  await Category.query().findById(categoryId).update({ name });
+  await Category.query().findById(categoryId).update({ name, image: imgCategory });
 
   return '';
 };
 
 exports.getList = () => {
-  const categories = Category.query().select('id', 'name', 'quantity', 'image');
+  const categories = Category.query().select('id', 'name', 'image');
 
   return categories;
 };

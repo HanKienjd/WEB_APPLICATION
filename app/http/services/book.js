@@ -12,20 +12,20 @@ exports.create = async ({
   if (book) return abort(400, 'This book is already exits');
 
   await Book.query().insert({
-    name, categoryId, quantity, yearRelease, author, image: `${process.env.APP_URL_UPLOAD}/${bookImg}`, publisher, note,
+    name, categoryId, quantity, yearRelease, author, image: bookImg, publisher, note,
   });
 
   return '';
 };
 
-exports.update = async ({ bookId, name }) => {
-  const book = await Book.query().findOne({
-    name,
-  });
+exports.update = async ({ bookId, data, imageBook }) => {
+  const book = await Book.query().findOne(data.name);
 
   if (book && book.id === bookId) return abort(400, 'This book is already exits');
 
-  await Book.query().findById(bookId).update({ name });
+  await Book.query().findById(bookId).update({
+    name: data.name, categoryId: data.categoryId, quantity: data.quantity, yearRelease: data.yearRelease, author: data.author, image: imageBook, publisher: data.publisher, note: data.note,
+  });
 
   return '';
 };

@@ -1,13 +1,12 @@
 const Joi = require('joi');
 
-const categoryService = require('../../services/category');
+const bookService = require('../../services/book');
 const { abort } = require('../../../helpers/error');
 
 async function validation({ categoryId, name }) {
   try {
     const schema = Joi.object().keys({
       categoryId: Joi.number().integer().min(1),
-      name: Joi.string(),
     });
 
     return await schema.validateAsync({ categoryId, name });
@@ -17,13 +16,13 @@ async function validation({ categoryId, name }) {
 }
 
 async function update(req, res) {
-  const { categoryId } = req.params;
-  const { name } = req.body;
-  const imgCategory = req.file.filename;
+  const { bookId } = req.params;
+  const data = req.body;
+  const imageBook = req.file.filename;
 
-  await validation({ categoryId, name });
+  await validation({ bookId });
 
-  await categoryService.update({ categoryId, name, imgCategory });
+  await bookService.update({ bookId, data, imageBook });
 
   return res.status(204).send();
 }
